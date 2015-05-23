@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.css"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 	<link rel="stylesheet" href="ext/fullcalendar/fullcalendar.min.css" />
+</head>
 <body>
 	<h1 style="text-align : center">ICS debugging tool </h1>
 	<div id="optionPanel">
@@ -22,44 +23,51 @@
 	<div id="mergePanel" class="hidden">
 
 	</div>
-	<h2>Cal-heatmap</h2>
+
+	<h2>Info</h2>
+	<div id="infoPanel">
+	</div>
+	<h2>Heatmap</h2>
 	<div>
 		<button id="prev">Prev</button>
 		<button id="current">Current</button>
 		<button id="next">Next</button>
 	</div>
 	<div id="cal-heatmap"></div>
-	<h2>jQuery FullCalendar</h2>
+	<h2>FullCalendar</h2>
 	<div id="full-calendar"></div>
 	<br/><br/>
 	<a href="http://etud.insa-toulouse.fr/~hadang/fossasia-api/data/" target="_blank">Dataset</a>
 	<br/><br/>
 	<a href="parser-result.php" target="_blank">Ics parser result</a>
-
-<script type="text/javascript">
-
-</script>
-<style>
- #cal-heatmap {
- 	margin-top: 20px;
- 	margin-bottom: 80px;
- }
- #full-calendar {
- 	margin-top : 20px;
-	width: 700px;
- }
- .hidden {
- 	display: none;
- }
- #importPanel {
- 	margin-top : 20px;
- }
- #icstext {
- 	min-width: 500px;
- 	min-height: 100px;
- }
- a.novisit, a.novisit:visited {
- 	color : blue;
- }
-</style>
+	<style>
+	 #cal-heatmap {
+	 	margin-top: 20px;
+	 }
+	 #full-calendar {
+	 	margin-top : 20px;
+		width: 650px;
+  		font-size: 12px;
+	 }
+	 .hidden {
+	 	display: none;
+	 }
+	 #importPanel {
+	 	margin-top : 20px;
+	 }
+	 #icstext {
+	 	min-width: 500px;
+	 	min-height: 100px;
+	 }
+	 a.novisit, a.novisit:visited {
+	 	color : blue;
+	 }
+	 table, th, td {
+	    border: 1px solid black;
+	    border-collapse: collapse;
+	}
+	th, td {
+	    padding: 5px;
+	}
+	</style>
 </body>

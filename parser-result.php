@@ -20,7 +20,6 @@ require 'lib/class.iCalReader.php';
 
 
 $datafiles = scandir('../data');
-$fp = fopen('heatmap-combined-data.json', 'w+');
 $json = array();
 
 foreach ($datafiles as $file) {
@@ -53,7 +52,7 @@ foreach ($datafiles as $file) {
 
     echo '<hr/>';
 	 echo '<button type="button" class="toggleButton">Show content</button>';
-	 echo '<div class="hiddeninfo">';
+	 echo '<div class="hidden">';
     foreach ($events as $event) {
         echo 'SUMMARY: ' . $event['SUMMARY'] . '<br/>';
         echo 'DTSTART: ' . $event['DTSTART'] . ' - UNIX-Time: ' . $ical->iCalDateToUnixTimestamp($event['DTSTART']) . '<br/>';
@@ -68,26 +67,22 @@ foreach ($datafiles as $file) {
         echo 'STATUS: ' . $event['STATUS'] . '<br/>';
         echo 'TRANSP: ' . $event['TRANSP'] . '<br/>';
         echo '<hr/>';
-        $json[$ical->iCalDateToUnixTimestamp($event['DTSTART'])] = '1';
     }
 	echo "</div>";
 	echo '<hr/>';
 
 }
-
-fwrite($fp, json_encode($json));
-fclose($fp);
 ?>
 
 <style>
-	.hiddeninfo {
+	.hidden {
 		display : none;
 	}
 </style>
 <script>
 	$(document).ready(function() {
 		$('.toggleButton').click(function(e) {
-			$(e.target).next().toggleClass("hiddeninfo");
+			$(e.target).next().toggleClass("hidden");
 	 	});
 	});
 </script>

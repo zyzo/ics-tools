@@ -1,6 +1,22 @@
 function parseFromImported() {
 	var text = $('#icstext').val();
-	console.log(text);
+	$.ajax({
+		url : 'ajax/icsprocessor.php',
+		data : {text : text},
+		method: 'POST',
+	}).done(function(msg) {
+		var json = JSON.parse(msg);
+		$('#full-calendar').fullCalendar('removeEvents');
+		$('#full-calendar').fullCalendar('addEventSource', json.fullCalendar);
+		updateInfoPanel(json.metainfo);
+	});
+}
+
+function updateInfoPanel(infoArray) {
+	var infoTable = $('#infoPanel').empty().append('<table></table>').find('table');
+	$.each(infoArray, function(index, value) {
+		infoTable.append("<tr><td class=\"key\">" + index + "</td><td class=\"value\">" + value + "</td><tr>");
+	});
 }
 
 $(document).ready(function() {
@@ -27,16 +43,15 @@ $(document).ready(function() {
 	    header: {
 			left: 'prev,next today',
 			center: 'title',
-			right: 'year,month,agendaWeek,agendaDay'
+			right: 'month,agendaWeek,agendaDay'
 		},
 		events : fullCalendarData,
 		eventRender : function(event, element) {
 			element.qtip({
-				content : event.description
+				content : (event.description ? event.description : event.title)
 			});
 		},
-	    height : 500,
-	    aspectRatio : 3
+	    aspectRatio : 2
     });
 
 	$('#parseBtn').click(function(e) {
