@@ -59,4 +59,15 @@ $(document).ready(function() {
 		$('#importPanel').toggleClass('hidden');
 		return false;
 	});
+
+	$('#examplesPanel select').click(function(e) {
+		console.log(e.target.value);
+		$.ajax({
+			url : 'ajax/geticscontent.php',
+			data : {filename : e.target.value},
+			method: 'POST',
+		}).done(function(msg) {
+			$('#icstext').val(msg);
+		});
+	});
 });

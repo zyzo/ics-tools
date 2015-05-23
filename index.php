@@ -17,6 +17,19 @@
 		[<a id="parseBtn" href="#" class="novisit">Parser</a>] [<a id="mergeBtn" href="#" class="novisit">Merger</a>]
 	</div>
 	<div id="importPanel" class="hidden">
+		<div id="examplesPanel">Example files 
+		<select>
+		<?php
+			$datafiles = scandir('../data');	
+			foreach ($datafiles as $file) {
+			    if ($file === '.' || $file === '..') {
+			        continue;
+			    }
+			    echo "<option value='$file'>$file</option>";
+		}
+		?>
+		</select>
+		</div>
 		<textarea id="icstext" placeholder="Copy your ics / iCal text here"></textarea> 
 		<button id="importConfirmBtn" onclick="parseFromImported();">Feed me !</button>
 	</div>
@@ -48,6 +61,9 @@
 	 	margin-top : 20px;
 		width: 650px;
   		font-size: 12px;
+	 }
+	 #examplesPanel {
+	 	margin-bottom: 5px;
 	 }
 	 .hidden {
 	 	display: none;
