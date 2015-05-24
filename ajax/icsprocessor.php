@@ -18,13 +18,18 @@ if (!array_key_exists('text', $_POST)) {
 $icsText =  $_POST['text'];
 $ics = new ICal(explode("\n", $icsText));
 $json = array();
+$events = $ics->events();
+$date = $events[0]['DTSTART'];
 $json['metainfo'] = array(
+	'PRODID' => $ics->cal['VCALENDAR']['PRODID'],
+	'First event date' => $date,
+	'Unix timestamp' => $ics->iCalDateToUnixTimestamp($date),
 	'Number of events' => $ics->event_count,
 	'Number of recurrent events' => $ics->recurrent_event_count,
 	'Number of todos' => $ics->todo_count 
 	);
 $json['fullCalendar'] = array();
-$events = $ics->events();
+$json['calHeatmap'] = array();
 foreach ($events as $event) {
 	$cell = array(title => $event['SUMMARY'], description => $event['DESCRIPTION']);
 	if (array_key_exists('DTSTART', $event)) {
@@ -34,6 +39,13 @@ foreach ($events as $event) {
         $cell['end'] = convertTimeToFullCalendar($event['DTEND']);
     }
     array_push($json['fullCalendar'], $cell);
+
+    $unixTimestamp = $ics->iCalDateToUnixTimestamp($event['DTSTART']);
+    if (array_key_exists($unixTimestamp, $json['calHeatmap'])) {
+   		$json['calHeatmap'][$unixTimestamp] += 1;
+   	} else {
+   		$json['calHeatmap'][$unixTimestamp] = 1;
+   	}
 }
 
 echo json_encode($json);

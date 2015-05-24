@@ -1,3 +1,4 @@
+calHeatmap = new CalHeatMap();
 function parseFromImported() {
 	var text = $('#icstext').val();
 	$.ajax({
@@ -9,6 +10,8 @@ function parseFromImported() {
 		$('#full-calendar').fullCalendar('removeEvents');
 		$('#full-calendar').fullCalendar('addEventSource', json.fullCalendar);
 		updateInfoPanel(json.metainfo);
+		console.log(json.calHeatmap);
+		calHeatmap.update(json.calHeatmap, true);
 	});
 }
 
@@ -20,23 +23,22 @@ function updateInfoPanel(infoArray) {
 }
 
 $(document).ready(function() {
-	var cal = new CalHeatMap();
-	cal.init({
+	calHeatmap.init({
 		start: new Date(2015, 0),
 		domain: "month",
 		subDomain: "day",
-		data : "heatmap-data.json",
+		data : {},
 		dataType: "json",
 		domainLabelFormat: "%m-%Y"											
 	});
 	$('#prev').click(function() {
-		cal.previous();
+		calHeatmap.previous();
 	});
 	$('#current').click(function() {
-		cal.rewind();
+		calHeatmap.rewind();
 	});
 	$('#next').click(function() {
-		cal.next();
+		calHeatmap.next();
 	});
 	
 	$('#full-calendar').fullCalendar({
