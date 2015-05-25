@@ -11,6 +11,11 @@
  * @license  http://www.opensource.org/licenses/mit-license.php MIT License
  * @link     https://github.com/MartinThoma/ics-parser/
  * @example  $ical = new ical('MyCal.ics'); print_r($ical->events());
+ *
+ * UPDATE NOTES : @zyzo (htto://www.github.com/zyzo)
+ *   - Add recurrence event counter
+ *   - Add option disable recurrent events
+ * 
  */
 
 /**
@@ -38,6 +43,9 @@ class ICal
     /* Which keyword has been added to cal at last? */
     private /** @type {string} */ $last_keyword;
 
+    /** Disable recurrent events */
+    private $disable_recurrent;
+
     /* The value in years to use for indefinite, recurring events */
     public /** @type {int} */ $default_span = 2;
 
@@ -48,8 +56,9 @@ class ICal
      *
      * @return Object The iCal Object
      */
-    public function __construct($filename)
+    public function __construct($filename, $disable_recurrent = false)  
     {
+        $this->disable_recurrent = $disable_recurrent;
         if (!$filename) {
             return false;
         }
@@ -130,7 +139,10 @@ class ICal
                         break;
                 }
             }
-            $this->process_recurrences();
+            if (!$this->disable_recurrent) {
+                $this->process_recurrences();
+            }
+            $this->recurrent_event_count = $this->count_recurrences();
             return $this->cal;
         }
     }
@@ -239,6 +251,20 @@ class ICal
         return $timestamp;
     }
 
+    private function count_recurrences() {
+        $array = $this->cal;
+        $events = $array['VEVENT'];
+        $recurrent_event_count = 0;
+        if (empty($events))
+            return false;
+        foreach ($array['VEVENT'] as $anEvent) {
+            if (isset($anEvent['RRULE']) && $anEvent['RRULE'] != '') {
+                $recurrent_event_count++;
+            }
+        }
+        return $recurrent_event_count;
+    }
+
     /**
      * Processes recurrences
      *
@@ -253,7 +279,6 @@ class ICal
             return false;
         foreach ($array['VEVENT'] as $anEvent) {
             if (isset($anEvent['RRULE']) && $anEvent['RRULE'] != '') {
-                $this->recurrent_event_count++;
                 // Recurring event, parse RRULE and add appropriate duplicate events
                 $rrules = array();
                 $rrule_strings = explode(';', $anEvent['RRULE']);

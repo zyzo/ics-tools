@@ -12,6 +12,8 @@ function parseFromImported() {
 		updateInfoPanel(json.metainfo);
 		console.log(json.calHeatmap);
 		calHeatmap.update(json.calHeatmap, true);
+		// persist change
+		calHeatmap.options.data = json.calHeatmap;
 	});
 }
 
@@ -31,6 +33,9 @@ $(document).ready(function() {
 		dataType: "json",
 		domainLabelFormat: "%m-%Y"											
 	});
+	$('#prevYear').click(function() {
+		calHeatmap.previous(12);
+	});
 	$('#prev').click(function() {
 		calHeatmap.previous();
 	});
@@ -40,17 +45,20 @@ $(document).ready(function() {
 	$('#next').click(function() {
 		calHeatmap.next();
 	});
+	$('#nextYear').click(function() {
+		calHeatmap.next(12);
+	});
 	
 	$('#full-calendar').fullCalendar({
 	    header: {
-			left: 'prev,next today',
+			left: 'prevYear,prev,next,nextYear today',
 			center: 'title',
 			right: 'month,agendaWeek,agendaDay'
 		},
 		events : fullCalendarData,
 		eventRender : function(event, element) {
 			element.qtip({
-				content : (event.description ? event.description : event.title)
+				content : (event.description ? event.description.replace(/\\n/g, "<br />") : event.title.replace(/\\n/g, "<br />"))
 			});
 		},
 	    aspectRatio : 2
@@ -58,7 +66,7 @@ $(document).ready(function() {
 
 	$('#parseBtn').click(function(e) {
 		e.preventDefault();
-		$('#importPanel').toggleClass('hidden');
+		$('#parserPanel').toggleClass('hidden');
 		return false;
 	});
 
