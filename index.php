@@ -85,8 +85,8 @@ $dataOpts = generateDataOptions();
 	 .hidden {
 	 	display: none;
 	 }
-	 #parserPanel {
-	 	margin-top : 20px;
+	 #examplesPanel {
+	 	margin-top : 10px;
 	 }
 	 .largeArea {
 	 	min-width: 500px;
