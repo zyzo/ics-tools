@@ -16,11 +16,11 @@
 	<div id="optionPanel">
 		[<a id="parseBtn" href="#" class="novisit">Parser</a>] [<a id="mergeBtn" href="#" class="novisit">Merger</a>]
 	</div>
-	<div id="importPanel" class="hidden">
+	<div id="parserPanel">
 		<div id="examplesPanel">Example files 
 		<select>
 		<?php
-			$datafiles = scandir('../data');	
+			$datafiles = scandir('data');	
 			foreach ($datafiles as $file) {
 			    if ($file === '.' || $file === '..') {
 			        continue;
@@ -36,18 +36,20 @@
 	<div id="mergePanel" class="hidden">
 
 	</div>
-
+	<hr/>
 	<h2>Info</h2>
 	<div id="infoPanel">
 	</div>
 	<h2>Heatmap</h2>
 	<div>
+		<button id="prevYear">Prev year</button>
 		<button id="prev">Prev</button>
 		<button id="current">Current</button>
 		<button id="next">Next</button>
+		<button id="nextYear">Next year</button>
 	</div>
 	<div id="cal-heatmap"></div>
-	<h2>FullCalendar</h2>
+	<h2>Calendar</h2>
 	<div id="full-calendar"></div>
 	<br/><br/>
 	<a href="http://etud.insa-toulouse.fr/~hadang/fossasia-api/data/" target="_blank">Dataset</a>
@@ -68,12 +70,17 @@
 	 .hidden {
 	 	display: none;
 	 }
-	 #importPanel {
+	 #parserPanel {
 	 	margin-top : 20px;
 	 }
 	 #icstext {
 	 	min-width: 500px;
 	 	min-height: 100px;
+	 }
+	 #importConfirmBtn {
+	  	vertical-align: bottom;
+	 	margin: 4px;
+	 	height: 30px;
 	 }
 	 a.novisit, a.novisit:visited {
 	 	color : blue;

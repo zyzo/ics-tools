@@ -1,5 +1,17 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <style>
+    .hidden {
+        display : none;
+    }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.toggleButton').click(function(e) {
+                $(e.target).next().toggleClass("hidden");
+            });
+        });
+    </script>
 </head>
 <?php
 /**
@@ -26,7 +38,7 @@ foreach ($datafiles as $file) {
     if ($file === '.' || $file === '..') {
         continue;
     }
-    $ical   = new ICal('../data/' . $file);
+    $ical   = new ICal('../data/' . $file, true);
     $events = $ical->events();
     echo '<h3>File : ' . $file . '</h3><br/>';
     $date = $events[0]['DTSTART'];
@@ -73,16 +85,3 @@ foreach ($datafiles as $file) {
 
 }
 ?>
-
-<style>
-	.hidden {
-		display : none;
-	}
-</style>
-<script>
-	$(document).ready(function() {
-		$('.toggleButton').click(function(e) {
-			$(e.target).next().toggleClass("hidden");
-	 	});
-	});
-</script>

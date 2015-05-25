@@ -13,4 +13,4 @@ if (!array_key_exists('filename', $_POST)) {
 	die;
 }
 
-echo file_get_contents('../../data/' . $_POST['filename']);
+echo file_get_contents('../data/' . $_POST['filename']);
