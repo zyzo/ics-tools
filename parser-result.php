@@ -31,7 +31,7 @@
 require 'lib/class.iCalReader.php';
 
 
-$datafiles = scandir('../data');
+$datafiles = scandir('data');
 $json = array();
 
 foreach ($datafiles as $file) {
