@@ -46,4 +46,22 @@ class IcsMerger {
 		$result['VEVENTS'] = array_map($callback, $result['VEVENTS']);
 		return $result;
 	}
+
+	public static function getRawText($icsMergerResult) {
+
+		$callback = function ($v, $k) {
+			if (is_array($v)) {
+				return '';
+			} else {
+				return $k . ':' . $v . "\n"; 
+			}
+		};
+		$str = implode('', array_map($callback, $icsMergerResult['VCALENDAR'], array_keys($icsMergerResult['VCALENDAR'])));
+		foreach ($icsMergerResult['VEVENTS'] as $event) {
+			$str .= 'BEGIN:VEVENT' . "\n"; 
+			$str .= implode('', array_map($callback, $event, array_keys($event)));
+			$str .= 'END:VEVENT' . "\n";
+		}
+		return $str;
+	}
 }
