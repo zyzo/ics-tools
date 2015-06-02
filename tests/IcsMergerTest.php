@@ -37,7 +37,7 @@ class IcsMergerTest extends PHPUnit_Framework_TestCase {
 		$this->merger->add
 		("BEGIN:VCALENDAR
 		  BEGIN:VEVENT
-		  DTSTART;TZID=EST:20150527T213000
+		  DTSTART;TZID=America/New_York:20150527T213000
 		  SUMMARY:Event 2
 		  END:VEVENT
 		  END:VCALENDAR

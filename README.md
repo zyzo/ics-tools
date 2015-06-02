@@ -1,6 +1,8 @@
 # ics-tools
 ICalendar tools for building calendar service at FOSSASIA API https://github.com/fossasia/api.fossasia.net
 
+[![Build Status](https://travis-ci.org/zyzo/ics-tools.svg?branch=master)](https://travis-ci.org/zyzo/ics-tools)
+
 **Demo** : http://fossasia-api.herokuapp.com/
 
 ## Installation instruction
