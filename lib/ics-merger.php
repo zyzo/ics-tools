@@ -4,19 +4,33 @@ require_once 'class.iCalReader.php';
 class IcsMerger {
 
 	private $inputs = array();
-	private $config = array();
+	private $defaultHeader = array();
 	private $defaultTimezone;
 	const CONFIG_FILENAME = 'ics-merger-config.ini';
 
-	public function __construct() {
-		$this->config = parse_ini_file(IcsMerger::CONFIG_FILENAME);
-		$this->defaultTimezone = new DateTimeZone($this->config['DEFAULT_TIMEZONE']);
+    /**
+     * Initialize a new IcsMerger. This class requires an ini file. The name of the file could 
+     * be passed as parameter. If it is not specified, the constructor will automatically look for ics-merger-config.ini 
+     * @param null|string $iniFilename
+     */
+	public function __construct($iniFilename = IcsMerger::CONFIG_FILENAME) {
+		$configs = parse_ini_file($iniFilename, true);
+		$this->defaultHeader = $configs['ICS_HEADER'];
+		$this->defaultTimezone = new DateTimeZone($this->defaultHeader['X-WR-TIMEZONE']);
 	}
 
+	/**
+	 * Add text string in ics format to the merger
+	 * @param string $text
+	 */
 	public function add($text) {
 		array_push($this->inputs, $text);
 	}
 
+	/**
+	 * Return the result after parsing & merging inputs ics (added via IcsMerger::add)
+	 * @return array
+	 */
 	public function getResult() {
 		$result = array(
 			'VCALENDAR' => array(),
@@ -40,7 +54,9 @@ class IcsMerger {
 			}
 		}
 
-		$result['VCALENDAR']['PRODID'] = $this->config['DEFAULT_PRODID'];
+		foreach ($this->defaultHeader as $key => $value) {
+			$result['VCALENDAR'][$key] = $this->defaultHeader[$key];
+		}
 
 		$callback = function($value) {
 			return $value;
@@ -50,22 +66,24 @@ class IcsMerger {
 		return $result;
 	}
 
+	// traverse calendar header to extract important informations : default timezone, etc.
 	private function processCalendarHead($calendarHead, &$timezone) {
 		foreach ($calendarHead as $key => $value) {
 			switch ($key) {
 				// google calendar
 				case 'X-WR-TIMEZONE':
 					$timezone = $value;
-					$calendarHead[$key] = $this->config['DEFAULT_TIMEZONE']; 
 					break;
-				
 				default:
-					# code...
 					break;
 			}
 		}
 		return $calendarHead;
 	}
+
+
+	// traverse calendar events to perform modifications
+	// e.g : convert datetime to default timezone
 	private function processEvents($events, $timezone = null) {
 		foreach($events as &$event) {
 			foreach ($event as $key => &$value) {
@@ -103,6 +121,11 @@ class IcsMerger {
 		return $events;
 	}
 
+	/**
+	 * Convert an array returned by IcsMerger::getResult() into valid ics string
+	 * @param array $icsMergerResult
+	 * @return string
+	 */
 	public static function getRawText($icsMergerResult) {
 		$callback = function ($v, $k) {
 			if (is_array($v)) {
